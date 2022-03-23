@@ -1,0 +1,33 @@
+name: Update Kubernetes infrastructure
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tf/**/*' # All terraform files
+      - '.github/workflows/infrastructure.yaml' # This manifest
+  push:
+    branches: [main]
+    paths:
+      - 'tf/**/*' # All terraform files
+      - '.github/workflows/infrastructure.yaml' # This manifest
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: tf
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@v1.1.0
+        with:
+          terragrunt_version: 0.21.13
+      - name: test
+        run: terraform --version
+      - name: tttt
+        run: terragrunt --version
