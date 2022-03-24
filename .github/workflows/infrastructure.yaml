@@ -16,7 +16,7 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
     env:
-      working-directory: tf
+      working-directory: .github/workflows
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
@@ -33,7 +33,10 @@ jobs:
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
       - name: Import Yandex key
-        run: echo `echo $YC_SERVICE_ACCOUNT_KEY_B64 | base64 --decode` > ~/yandex-key.json
+        run: echo `echo QWxhZGRpbjpvcGVuIHNlc2FtZQ== | base64 --decode` > yandex-key.json
+        working-directory: ${{ env.working-directory }}
+      - name: bla
+        run: echo ${{ env.working-directory }}/yandex-key.json
       - name: Create temporary IAM token
         run: export TF_VAR_k8s_token=$(yc iam create-token)
         
