@@ -23,19 +23,39 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Import Yandex key
-        uses: timheuer/base64-to-file@v1.1
+      - name: bla
+        id: plan
+        run: echo "yeeeeeeeeee"
+      - name: Plan output
+        id: output
+        uses: actions/github-script@v3
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "Terragrunt\n${{ steps.plan.outputs.stdout }}"
         with:
-          encodedString: ${{ env.BASE64 }}
-          fileName: 'secret.json'
-          fileDir: '/home/runner/yandex-cloud'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terragrunt Plan 📖\`${{ steps.plan.outcome }}\`
+            <details><summary>Show Plan</summary>
 
-      - name: Setup Terrafrom and Terragrunt
-        uses: autero1/action-terragrunt@v1.1.0
-        with:
-          terragrunt_version: 0.36.6
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+            \`\`\`hcl
+
+            ${process.env.PLAN}
+
+            \`\`\`
+
+            </details>
+
+            **Pusher**: @${{ github.actor }}
+
+            **Action**: ${{ github.event_name }}
+            `;
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
 
         
