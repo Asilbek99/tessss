@@ -14,7 +14,7 @@ on:
 
 jobs:
   terraform:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     env:
       BASE64: QWxhZGRpbjpvcGVuIHNlc2FtZQ==
       working-directory: .github/workflows
@@ -40,7 +40,7 @@ jobs:
 
             \`\`\`hcl
 
-            ${{ steps.plan.outputs.stdout }}
+            ${process.env.PLAN}
 
             \`\`\`
 
