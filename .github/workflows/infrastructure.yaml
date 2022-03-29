@@ -14,7 +14,9 @@ on:
 
 jobs:
   terraform:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    outputs:
+      PLAN2: ${{ steps.plan.outputs.stdout }}
     env:
       BASE64: QWxhZGRpbjpvcGVuIHNlc2FtZQ==
       working-directory: .github/workflows
@@ -31,7 +33,7 @@ jobs:
         uses: actions/github-script@v3
         if: github.event_name == 'pull_request'
         env:
-          PLAN: "Terragrunt\n${{ steps.plan.outputs.stdout }}\n${{ steps.plan.outputs.stderr }}"
+          PLAN: "Terragrunt\n${{ outputs.PLAN2 }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
