@@ -13,6 +13,7 @@ on:
       - '.github/workflows/infrastructure.yaml' # This manifest
 
 jobs:
+
   terraform:
     runs-on: ubuntu-latest
     env:
@@ -27,7 +28,7 @@ jobs:
         id: plan
         run: info
       - name: test
-        run: echo ${{ steps.plan.outputs.stdout }}
+        run: echo ${{ steps.plan.outputs.stdout.value }}
       - name: Plan output
         id: output
         uses: actions/github-script@v3
