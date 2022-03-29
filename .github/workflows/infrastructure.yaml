@@ -28,7 +28,7 @@ jobs:
         run: echo  "yeeeeeeeeee"
       - name: Plan output
         id: output
-        uses: actions/github-script@v6
+        uses: actions/github-script@v3
         if: github.event_name == 'pull_request'
         env:
           PLAN: "Terragrunt\n${{ steps.plan.outputs.stdout }}\n${{ steps.plan.outputs.stderr }}"
@@ -40,7 +40,7 @@ jobs:
 
             \`\`\`hcl
 
-            ${process.env.PLAN}
+            ${{ steps.plan.outputs.stdout }}
 
             \`\`\`
 
@@ -50,7 +50,7 @@ jobs:
 
             **Action**: ${{ github.event_name }}
             `;
-            await github.issues.createComment({
+            github.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
