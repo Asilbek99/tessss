@@ -26,6 +26,7 @@ jobs:
       - name: bla
         id: plan
         run: echo ::set-output name=tagged_image::$(echo "yeeeeeeeeee")
+      - uses: mxschmitt/action-tmate@v3
       - name: Plan output
         id: output
         uses: actions/github-script@v3
